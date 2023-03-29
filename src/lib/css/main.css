@@ -5,6 +5,7 @@
 }
 
 .app {
+  --primary:red;
   width: 100%;
   height: 100vh;
   box-sizing: border-box;
@@ -13,6 +14,9 @@
 .app .form {
   width: 60%;
   margin: 0 auto;
+}
+.app .form button {
+  background-color: var(--primary);
 }
 
 @media (max-width: 500px) {

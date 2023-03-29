@@ -5,11 +5,10 @@
     import { page } from '$app/stores';
     import type { ActionResult } from '@sveltejs/kit';
     import { auth } from "$lib/firebase/client/initialize";
+    import type { HtmlTag } from "svelte/internal";
+    import { invalidateAll } from "$app/navigation";
+    import { enhancer } from "$lib/actions";
 
-
-    console.log("data", $page.form);
-
-    
 
 
     const handleSignIn:SubmitFunction = async (event) =>{
@@ -26,41 +25,29 @@
       
     }
 
-    type User =  {
-        firstname:string,
-        lastname:string,
-        password:string,
-        email:string
-    }
+ 
 
-    const submitAction = async (event) => {
-        // const formData = new FormData(event.target as HTMLFormElement)
-        // const user:User = {
-        //     'firstname': formData.get("firstname") as string || "",
-        //     'lastname': formData.get("lastname") as string || "",
-        //     'password': formData.get("password") as string || "",
-        //     'email': formData.get("email") as string || ""
-        // }
-        // console.log(user);
-        // const userCredentials = await createUserWithEmailAndPassword (auth, user.email, user.password)
-        // const userx = userCredentials.user;
-        // console.log(userx);
-        const formData = new FormData(event.target as HTMLFormElement);
-        const response = await fetch(event.action, {
+    const submitAction:SubmitFunction = async (event) => {
+        const formData = new FormData(event.form as HTMLFormElement);
+        const response = await fetch(event.form.action, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'x-sveltekit-action': 'true'
+            }
         });
-
         const result = deserialize(await response.text());
-
-        console.log("result", result);
+        console.log("result",result)
+        if (result.type === 'success') {
+            // re-run all `load` functions, following the successful update
+            // await invalidateAll();
+        }
+        applyAction(result);
     }
 
 </script>
 
-<!-- <form class="form" method="POST" use:enhance action="?/signup" > -->
-<!-- <form class="form" method="POST" action="?/signup" on:submit|preventDefault use:enhance={handleSignIn} > -->
-<form class="form" action="?/signup" on:submit|preventDefault = {submitAction}>
+<form class="form" method="POST" use:enhance={submitAction} action="?/signup" >
     <div class="grid">
         <label for="firstname">
             First name
@@ -80,7 +67,6 @@
     <input type="email" id="email" name="email" placeholder="Email address" required>
     <button type="submit">Submit</button>
 </form>
-<!-- </form> -->
 
 <style lang="scss">
  

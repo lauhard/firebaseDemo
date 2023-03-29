@@ -4,9 +4,9 @@
     import { onMount } from 'svelte';
     import type { PageData, PageLoad, PageServerData } from './$types';
     
-    let data: PageServerData = null;
-
-    console.log("server data: ", data)
+    let data:PageServerData = {}
+    console.log("$page.form", $page.form);
+    $: console.log("server data: ", data)
 </script>
 
 <h1>Signup</h1>
