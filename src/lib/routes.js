@@ -1,7 +1,7 @@
 export const routes=[
     {
         pathname: "/",
-        name: "Dashboard",
+        name: "Home",
         public: true,
         icon: "",
     },
@@ -15,6 +15,12 @@ export const routes=[
         pathname: "/signup",
         name: "Signup",
         public: true,
+        icon: "",
+    },
+    {
+        pathname: "/dashbord",
+        name: "Dashbord",
+        public: false,
         icon: "",
     },
 ]

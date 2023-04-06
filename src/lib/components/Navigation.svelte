@@ -1,6 +1,9 @@
 <script lang="ts">
-    import {routes} from "$lib/routes.js";
+    import { routes } from "$lib/routes.js";
+    import uiStore from "$lib/stores/uiStore";
+    
 </script>
+
 
 <nav class="navigation">
     <ul>
@@ -8,7 +11,13 @@
     </ul>
     <ul>
         {#each routes as route}
-            {#if route.public}
+            {#if route.public === false}
+                {#if $uiStore.dashboard}
+                    <li>
+                        <a href="{route.pathname}">{route.name}</a>
+                    </li>
+                {/if}
+            {:else}
                 <li>
                     <a href="{route.pathname}">{route.name}</a>
                 </li>

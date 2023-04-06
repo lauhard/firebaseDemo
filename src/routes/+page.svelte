@@ -1,1 +1,9 @@
-<h1>Dashboard</h1>
+<script>
+
+</script>
+
+<h1>HOME</h1>
+
+<style>
+
+</style>
