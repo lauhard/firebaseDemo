@@ -14,11 +14,11 @@ export const handle:Handle = (async ({event, resolve})=>{
         admin: false,
         dashboard: false,
     };
-    try {
+    // try {
         initializeAdminApp(admin);
-    } catch (error) {
-        console.log("firebase initalize error", admin);
-    }
+    // } catch (error) {
+    //     console.log("firebase initalize error", admin);
+    // }
 
     if(session) {
         try {

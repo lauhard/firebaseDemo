@@ -1,5 +1,5 @@
 import type { Credentials } from "$lib/types/credentials";
-import { signInWithCustomToken as signInWithToken, signInWithEmailAndPassword as signIn } from "firebase/auth";
+import { signInWithCustomToken as signInWithToken, signInWithEmailAndPassword as signIn, signOut, type UserCredential } from "firebase/auth";
 import { auth } from "./initialize";
 
 export const signInWithCustomToken  = async (customToken:string)=> {
@@ -8,9 +8,55 @@ export const signInWithCustomToken  = async (customToken:string)=> {
 }
 
 export const signInWithEmailAndPassword = async (credentials: Credentials) => {
-    return await signIn( 
-        auth, 
-        credentials.email, 
-        credentials.password  
-    );
+    try {
+        const user:UserCredential = await signIn( 
+            auth, 
+            credentials.email, 
+            credentials.password  
+        );
+        return {
+            userCredentials:user,
+            error:null
+        }
+    } catch (error:any) {
+        return {
+            userCredentials:null,
+            error: dictionary[error.code]
+        }
+    }
+}
+
+export const logout = async () => {
+    try {
+        await signOut(auth)
+    } catch (error) {
+        console.log("logout failed: ",error)
+    }
+}
+
+const dictionary = {
+    "auth/email-already-in-use": {
+        field: "email",
+        error: "Email already in use."
+    },
+    "auth/weak-password": {
+        field: "password",
+        error: "The password must be a string with at least 6 characters."
+    },
+    "auth/internal-error": {
+        field: "",
+        error: "Error, signup failed."
+    },
+    "auth/user-not-found": {
+        field: "password",
+        error: "User not found."
+    },
+    "auth/wrong-password": {
+        field: "password",
+        error: "Wrong password."
+    },
+    "auth/too-many-requests": {
+        field: "password",
+        error: "Too many logins, the user got temporarly disabled."
+    }
 }

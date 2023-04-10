@@ -40,19 +40,7 @@
 
                 goto('/login')
 
-                //************************* direct login ************************//
-                // const userRecord = await signInWithCustomToken(data.customToken);
-                // const user = userRecord.user;
-                // const idToken = await user.getIdToken();
-                
-                // const response = await fetchUserFromFireBase(idToken);
-
-                // if(response.ok && response.status === 200) {
-                //     const {claims} = await user.getIdTokenResult();
-                //     uiStore.set({admin:claims.admin, dashboard:claims.dashboard})
-                //     goto('/dashbord');
-                // }
-                //************************* direct login ************************//
+               
             }
             formError = data.errorInfo;
         }else {
