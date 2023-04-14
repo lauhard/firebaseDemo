@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+    import { page } from '$app/stores';
+    import { formAction } from '$lib/forms/enhance';
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
-    export let formError="";
 </script>
 
-<form class="form" method="POST" on:submit|preventDefault="{(e)=>dispatch('login',{"event":e})}" >
+<form class="form" method="POST" use:enhance={(e)=>formAction(e, dispatch, "login")} action="?/login" >
     <div class="grid">
         <label for="email">
             Email address
@@ -16,12 +18,13 @@
         </label>
     </div>
     <button type="submit">Login</button>
-    {#if formError}
-        {formError}
+    {#if $page.form?.error }
+        <p> { $page.form?.error }</p>  
     {/if}
-    
+    <p>
+        <a href="/signup">Create Account</a>
+    </p>
 </form>
-
 
 <style lang="scss">
 

@@ -3,10 +3,12 @@ import type { SessionCookieOptions } from "firebase-admin/lib/auth/base-auth";
 import type { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import type { User } from "$lib/types/user";
 import { admin } from "./initialize";
-import type { FirebaseCreateUserResponse } from "$lib/types/firebaseCreateUserResponse";
+import { getCredentialsFromFormData, getDisplayNameFromFormData } from "$lib/utils/shared";
+import type { UserRecord } from "$lib/types/userRecord";
+
 
 export const createUser = async (data:FormData) => {
-    let response:FirebaseCreateUserResponse;
+    let response:UserRecord;
     try {
         const credentials = getCredentialsFromFormData(data);
 
@@ -55,7 +57,7 @@ export const verifySessionCookie = async (session:string) => {
 }
 
 export const setCustomUserClaims = async (uid:string)=> {
-    await admin.auth().setCustomUserClaims(uid, {admin:true, dashboard:true})
+    await admin.auth().setCustomUserClaims(uid, {admin:false, dashboard:true})
 }
 
 export const getCustomClaims = async (uid:string) => {
@@ -74,13 +76,3 @@ export const getUserFromToken = (decodedIdToken: DecodedIdToken)=>{
     return user;
 }
 
-export const getCredentialsFromFormData = (formData: FormData) => {
-    return {
-        email: formData.get("email")?.toString() || "",
-        password: formData.get("password")?.toString() || "",
-    }
-}
-
-export const getDisplayNameFromFormData = (formData: FormData) => {
-    return `${formData.get("firstname")} ${formData.get("lastname")}`;
-}

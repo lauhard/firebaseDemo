@@ -12,13 +12,11 @@ const initializeAdminApp= (admin: { credential: { cert: (arg0: any) => any; }; }
                 appCheck().app.name !== '[DEFAULT]'
             ){
                 console.log("trying to initialize firebase admin app...");
-    
                 initializeApp({
                     credential: admin.credential.cert(JSON.parse(PRIVATE_FIREBASE_ADMIN)),
                     databaseURL: `https://${JSON.parse(PRIVATE_FIREBASE_ADMIN).project_id}.firebaseio.com` 
                 });
                 console.log("app initialized...");
-
             } 
         }
     } catch (error) {
@@ -29,9 +27,7 @@ const initializeAdminApp= (admin: { credential: { cert: (arg0: any) => any; }; }
             databaseURL: `https://${JSON.parse(PRIVATE_FIREBASE_ADMIN).project_id}.firebaseio.com` 
         });
         console.log("app initialized...");
-        // console.log("firebase admin init error:",error);
     }
-    
 }
 
 export {

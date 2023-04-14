@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { fire } from '$lib/actions';
+	import { navigation } from '$lib/actions';
     import { routes } from "$lib/routes.js";
     import uiStore from "$lib/stores/uiStore";
-    import {user} from "$lib/stores/fireStore";
-    export let uid="";      
 </script>
-
-uid {uid}
 
 <nav class="navigation">
     <ul>
@@ -15,7 +11,7 @@ uid {uid}
     <ul>
         {#each routes as route}
             {#if route.public === false}
-                {#if $uiStore.dashboard}
+                {#if $uiStore.dashboard && route.pathname == "/dashboard"}
                     <li>
                         <a href="{route.pathname}">{route.name}</a>
                     </li>
@@ -26,9 +22,10 @@ uid {uid}
                 </li>
             {/if}
         {/each}
-        {#if $user?.uid}
+        {#if $uiStore.loggedIn === true}
             <li>
-                <a role="" use:fire on:logout ><span>Logout</span></a>
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a role="" use:navigation on:logout ><span>Logout</span></a>
             </li>
         {:else}
             <li>

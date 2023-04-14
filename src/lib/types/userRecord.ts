@@ -1,4 +1,4 @@
-export interface FirebaseCreateUserResponse {
+export interface UserRecord {
     uid:string | null,
     errorInfo: string | null,
     created:boolean,

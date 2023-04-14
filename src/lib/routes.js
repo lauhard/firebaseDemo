@@ -6,7 +6,7 @@ export const routes=[
         icon: "",
     },
     {
-        pathname: "/dashbord",
+        pathname: "/dashboard",
         name: "Dashbord",
         public: false,
         icon: "",

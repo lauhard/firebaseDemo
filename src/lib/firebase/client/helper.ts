@@ -19,9 +19,10 @@ export const signInWithEmailAndPassword = async (credentials: Credentials) => {
             error:null
         }
     } catch (error:any) {
+        const code:string = error.code;
         return {
             userCredentials:null,
-            error: dictionary[error.code]
+            error: dictionary[code]
         }
     }
 }
@@ -29,6 +30,7 @@ export const signInWithEmailAndPassword = async (credentials: Credentials) => {
 export const logout = async () => {
     try {
         await signOut(auth)
+        
     } catch (error) {
         console.log("logout failed: ",error)
     }

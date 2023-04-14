@@ -1,23 +1,29 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import  uiStore  from '$lib/stores/uiStore';
     import Navigation from '$lib/components/Navigation.svelte';
     import '$lib/css/pico/css/pico.min.css'
     import '$lib/css/main.css'
     import type { PageServerData } from './$types';
-    import type { User } from '$lib/types/user';
-    import { onDestroy } from 'svelte';
-    import { user } from '$lib/stores/fireStore';
     import { logout } from '$lib/firebase/client/helper';
+    import { callAction } from '$lib/utils/fetch';
 
-    // export const data: PageServerData;
-    
+    export let data: PageServerData;
+
     const handleLogout =  async (e:any)=> {
         console.log("logging out...", e);
-        await logout();
-        
+       
+        const response = await callAction(
+            '../../api/firebase',
+            null,
+            'DELETE',
+        );
+        if(response.ok && response.status === 200) {
+            console.log("logout response", response.body);
+            await logout();
+            uiStore.set({admin:false, dashboard:false, loggedIn:false})
+        }
     }
 </script>
-
 
 <div class="app">
     <Navigation on:logout={handleLogout}></Navigation>

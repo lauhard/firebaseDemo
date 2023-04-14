@@ -1,40 +1,35 @@
 
 import type { Actions, PageServerLoad} from "./$types";
 import { createUser, createCustomToken, setCustomUserClaims } from "$lib/firebase/admin/helper";
-import type { FirebaseCreateUserResponse } from "$lib/types/firebaseCreateUserResponse";
-import type { Claims } from "$lib/types/claims";
-import { admin, initializeAdminApp } from "$lib/firebase/admin/initialize";
+import type { UserRecord } from "$lib/types/userRecord";
+import { logout } from "$lib/firebase/client/helper";
 
-export const load = (async({cookies, request, locals, params, url}) => {
+export const load = (async(event) => {
     return {
-        user: locals.user,
-        claims: locals.claims
+        user: event.locals.user,
+        claims: event.locals.claims
     };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-    signup: async ({cookies, request}) => {
+    signup: async ({cookies, request}):Promise<any> => {
         const data = await request.formData();
-
-        // initializeAdminApp(admin);
-
-        const response:FirebaseCreateUserResponse = await createUser(data);
-
+        const response:UserRecord = await createUser(data);
         if(response.uid != null) {
-
             await setCustomUserClaims(response.uid);
-
             response.customToken = await createCustomToken(response.uid);
-            
         }
-       
-        return response;
-    },
-    // login: async ({ cookies, request })=> {
-    //     console.log("login")
-
-    //     const token = request.body;
-    //     console.log("request.body",token)
-    //     return {}
-    // }
+        if(response.errorInfo){
+            return {
+                success:false,
+                ...response
+            }
+        }
+        else {
+            return {
+                success:true,
+                ...response
+            }
+        }
+    }
 } satisfies Actions;

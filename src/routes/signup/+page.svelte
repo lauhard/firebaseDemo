@@ -1,29 +1,23 @@
 <script lang="ts">
-    import { page } from '$app/stores';
+    import { goto } from '$app/navigation';
 	import Signup from '$lib/components/Signup.svelte';
-    import { authUser } from '$lib/stores/fireStore';
     import type { PageServerData } from './$types';
 
-
     export let data: PageServerData;
-    $authUser
 
-    let formError:string | null = "";
-    
-    $:user = data.user;
-    $:console.log("user", user);
-    $:console.log("data", data);
-
-
-
+    const signup = (e:CustomEvent)=>{
+        const { result } = e.detail
+        console.log("signup result: ",result)
+        const { success } = result.data;
+            if( success) 
+                goto('/login')
+    }
     
 </script>
+
 <h1>Signup</h1>
 
-<p>user from server: {user?.uid} </p>
-<p>user from store: { $authUser?.uid}</p>
-
-<Signup></Signup>
+<Signup on:signup={signup} action="?/signup"></Signup>
 
 <style lang="scss">
 
